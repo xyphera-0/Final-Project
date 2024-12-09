@@ -66,6 +66,7 @@ int main( void ) {    /** Main Function ****/
 
     // Place initialization code (or run-once) code here
     PreProg(turns);
+    GPIO_setOutputHighOnPin(GPIO_PORT_P6, GPIO_PIN6);
     GPIO_setOutputLowOnPin(GPIO_PORT_P3, GPIO_PIN6 | GPIO_PIN7);
     while( 1 ) {
         // Place code that runs continuously in here
@@ -78,7 +79,7 @@ int main( void ) {    /** Main Function ****/
                 if(!GPIO_getInputPinValue(GPIO_PORT_P4, GPIO_PIN0)){
                     GPIO_setOutputLowOnPin(GPIO_PORT_P3, GPIO_PIN6 | GPIO_PIN7);
                     printf("Degrees: %u\r\n", turns[x]);
-                    __delay_cycles(240e6);
+                    __delay_cycles(50e6);
                     Turn(turns[x]);
                     __delay_cycles(24e6);
                     x+=1;
@@ -86,7 +87,7 @@ int main( void ) {    /** Main Function ****/
                 }else if(!GPIO_getInputPinValue(GPIO_PORT_P4, GPIO_PIN2)){
                     GPIO_setOutputLowOnPin(GPIO_PORT_P3, GPIO_PIN6 | GPIO_PIN7);
                     printf("Degrees: %u\r\n", turns[x]);
-                    __delay_cycles(240e6);
+                    __delay_cycles(50e6);
                     Turn(turns[x]);
                     __delay_cycles(24e6);
                     x+=1;
@@ -94,7 +95,7 @@ int main( void ) {    /** Main Function ****/
                 }else if(!GPIO_getInputPinValue(GPIO_PORT_P4, GPIO_PIN3)){
                     GPIO_setOutputLowOnPin(GPIO_PORT_P3, GPIO_PIN6 | GPIO_PIN7);
                     printf("Degrees: %u\r\n", turns[x]);
-                    __delay_cycles(240e6);
+                    __delay_cycles(50e6);
                     Turn(turns[x]);
                     __delay_cycles(24e6);
                     x+=1;
@@ -102,7 +103,7 @@ int main( void ) {    /** Main Function ****/
                 }else if(!GPIO_getInputPinValue(GPIO_PORT_P4, GPIO_PIN5)){
                     GPIO_setOutputLowOnPin(GPIO_PORT_P3, GPIO_PIN6 | GPIO_PIN7);
                     printf("Degrees: %u\r\n", turns[x]);
-                    __delay_cycles(240e6);
+                    __delay_cycles(50e6);
                     Turn(turns[x]);
                     __delay_cycles(24e6);
                     x+=1;
@@ -110,7 +111,7 @@ int main( void ) {    /** Main Function ****/
                 }else if(!GPIO_getInputPinValue(GPIO_PORT_P4, GPIO_PIN6)){
                     GPIO_setOutputLowOnPin(GPIO_PORT_P3, GPIO_PIN6 | GPIO_PIN7);
                     printf("Degrees: %u\r\n", turns[x]);
-                    __delay_cycles(240e6);
+                    __delay_cycles(50e6);
                     Turn(turns[x]);
                     __delay_cycles(24e6);
                     x+=1;
@@ -118,7 +119,7 @@ int main( void ) {    /** Main Function ****/
                 }else if(!GPIO_getInputPinValue(GPIO_PORT_P4, GPIO_PIN7)){
                     GPIO_setOutputLowOnPin(GPIO_PORT_P3, GPIO_PIN6 | GPIO_PIN7);
                     printf("Degrees: %u\r\n", turns[x]);
-                    __delay_cycles(240e6);
+                    __delay_cycles(50e6);
                     Turn(turns[x]);
                     __delay_cycles(24e6);
                     x+=1;
@@ -142,6 +143,8 @@ void GPIOInit(){
     GPIO_setAsPeripheralModuleFunctionInputPin(GPIO_PORT_P10,GPIO_PIN4 | GPIO_PIN5,GPIO_PRIMARY_MODULE_FUNCTION);
     GPIO_setAsInputPin(GPIO_PORT_P5, GPIO_PIN6);
     GPIO_setOutputLowOnPin(GPIO_PORT_P5, GPIO_PIN4 | GPIO_PIN5);
+    GPIO_setAsOutputPin(GPIO_PORT_P6, GPIO_PIN6);
+    GPIO_setOutputLowOnPin(GPIO_PORT_P6, GPIO_PIN6);
 }
 void Turn(uint32_t degrees){
     float degree1 = ((degrees * 3.1415/180) * (149/2) * 1.55);

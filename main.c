@@ -14,18 +14,17 @@
 
 // Add function prototypes here as needed.
 void GPIOInit();
-void Turn(float degrees);
-void PreProg(float turns[]);
+void Turn(uint32_t degrees);
+void PreProg(uint32_t turns[]);
 void CCR_ISR();
 void TimerInit();
 
 // Add global variables here as needed.
 int32_t enc_total1;
-float turns[3] = {};
+uint32_t turns[3] = {};
 
 int32_t enc_counts_track1;
 int32_t enc_counts1;
-int32_t enc_total1;
 
 int32_t sum_wheel_speed1; // store summation of wheel speed (timer counts)
 int32_t sum_measurements1; // track number of measurements in the summation variable
@@ -63,20 +62,22 @@ int main( void ) {    /** Main Function ****/
     // microcontroller for how we are going to use it.
     SysInit();
     GPIOInit();
-    PreProg(turns);
     TimerInit();
 
     // Place initialization code (or run-once) code here
-
-    while( 1 ) {  
+    PreProg(turns);
+    GPIO_setOutputLowOnPin(GPIO_PORT_P3, GPIO_PIN6 | GPIO_PIN7);
+    while( 1 ) {
         // Place code that runs continuously in here
         if(GPIO_getInputPinValue(GPIO_PORT_P5, GPIO_PIN6)){
             printf("Start\r\n");
             uint8_t x = 0;
+            printf("First: %u Second: %u Third %u\r\n",turns[0],turns[1],turns[2]);
             while(x <= 3){
                 //If any bumpers are hit, stop car and turn
                 if(!GPIO_getInputPinValue(GPIO_PORT_P4, GPIO_PIN0)){
                     GPIO_setOutputLowOnPin(GPIO_PORT_P3, GPIO_PIN6 | GPIO_PIN7);
+                    printf("Degrees: %u\r\n", turns[x]);
                     __delay_cycles(240e6);
                     Turn(turns[x]);
                     __delay_cycles(24e6);
@@ -84,6 +85,7 @@ int main( void ) {    /** Main Function ****/
                     printf("Block\r\n");
                 }else if(!GPIO_getInputPinValue(GPIO_PORT_P4, GPIO_PIN2)){
                     GPIO_setOutputLowOnPin(GPIO_PORT_P3, GPIO_PIN6 | GPIO_PIN7);
+                    printf("Degrees: %u\r\n", turns[x]);
                     __delay_cycles(240e6);
                     Turn(turns[x]);
                     __delay_cycles(24e6);
@@ -91,6 +93,7 @@ int main( void ) {    /** Main Function ****/
                     printf("Block\r\n");
                 }else if(!GPIO_getInputPinValue(GPIO_PORT_P4, GPIO_PIN3)){
                     GPIO_setOutputLowOnPin(GPIO_PORT_P3, GPIO_PIN6 | GPIO_PIN7);
+                    printf("Degrees: %u\r\n", turns[x]);
                     __delay_cycles(240e6);
                     Turn(turns[x]);
                     __delay_cycles(24e6);
@@ -98,6 +101,7 @@ int main( void ) {    /** Main Function ****/
                     printf("Block\r\n");
                 }else if(!GPIO_getInputPinValue(GPIO_PORT_P4, GPIO_PIN5)){
                     GPIO_setOutputLowOnPin(GPIO_PORT_P3, GPIO_PIN6 | GPIO_PIN7);
+                    printf("Degrees: %u\r\n", turns[x]);
                     __delay_cycles(240e6);
                     Turn(turns[x]);
                     __delay_cycles(24e6);
@@ -105,6 +109,7 @@ int main( void ) {    /** Main Function ****/
                     printf("Block\r\n");
                 }else if(!GPIO_getInputPinValue(GPIO_PORT_P4, GPIO_PIN6)){
                     GPIO_setOutputLowOnPin(GPIO_PORT_P3, GPIO_PIN6 | GPIO_PIN7);
+                    printf("Degrees: %u\r\n", turns[x]);
                     __delay_cycles(240e6);
                     Turn(turns[x]);
                     __delay_cycles(24e6);
@@ -112,6 +117,7 @@ int main( void ) {    /** Main Function ****/
                     printf("Block\r\n");
                 }else if(!GPIO_getInputPinValue(GPIO_PORT_P4, GPIO_PIN7)){
                     GPIO_setOutputLowOnPin(GPIO_PORT_P3, GPIO_PIN6 | GPIO_PIN7);
+                    printf("Degrees: %u\r\n", turns[x]);
                     __delay_cycles(240e6);
                     Turn(turns[x]);
                     __delay_cycles(24e6);
@@ -137,21 +143,24 @@ void GPIOInit(){
     GPIO_setAsInputPin(GPIO_PORT_P5, GPIO_PIN6);
     GPIO_setOutputLowOnPin(GPIO_PORT_P5, GPIO_PIN4 | GPIO_PIN5);
 }
-void Turn(float degrees){
-    degrees = ((degrees * 3.1415/180) * (149/2) * 1.55);
-    while(enc_total1 < degrees){
+void Turn(uint32_t degrees){
+    float degree1 = ((degrees * 3.1415/180) * (149/2) * 1.55);
+    printf("enc_total1: %d, degrees: %f\n", enc_total1, degree1);
+    enc_total1 = 0;
+    while(enc_total1 < degree1){
         GPIO_setOutputHighOnPin(GPIO_PORT_P3, GPIO_PIN6 | GPIO_PIN7);
         GPIO_setOutputLowOnPin(GPIO_PORT_P5, GPIO_PIN4);
         GPIO_setOutputHighOnPin(GPIO_PORT_P5, GPIO_PIN5);
+        printf("enc_total1: %d, degrees: %f\r\n", enc_total1, degree1);
     }
     printf("Turned\r\n");
     GPIO_setOutputLowOnPin(GPIO_PORT_P3, GPIO_PIN6 | GPIO_PIN7);
     enc_total1 = 0;
 }
-void PreProg(float turns[]){
+void PreProg(uint32_t turns[]){
     uint8_t i = 0;
+    uint8_t arraycount = 0;
     while(i < 3){
-        uint8_t arraycount = 0;
         if(!GPIO_getInputPinValue(GPIO_PORT_P4, GPIO_PIN0)){
             printf("Pressed\r\n");
             __delay_cycles(24e6);

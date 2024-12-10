@@ -21,7 +21,7 @@ void TimerInit();
 
 // Add global variables here as needed.
 int32_t enc_total1;
-uint32_t turns[3] = {};
+uint32_t turns[6] = {};
 
 int32_t enc_counts_track1;
 int32_t enc_counts1;
@@ -66,7 +66,7 @@ int main( void ) {    /** Main Function ****/
 
     // Place initialization code (or run-once) code here
     PreProg(turns);
-    GPIO_setOutputHighOnPin(GPIO_PORT_P6, GPIO_PIN6);
+    GPIO_setOutputHighOnPin(GPIO_PORT_P3, GPIO_PIN5);
     GPIO_setOutputLowOnPin(GPIO_PORT_P3, GPIO_PIN6 | GPIO_PIN7);
     while( 1 ) {
         // Place code that runs continuously in here
@@ -74,7 +74,7 @@ int main( void ) {    /** Main Function ****/
             printf("Start\r\n");
             uint8_t x = 0;
             printf("First: %u Second: %u Third %u\r\n",turns[0],turns[1],turns[2]);
-            while(x <= 3){
+            while(x <= 6){
                 //If any bumpers are hit, stop car and turn
                 if(!GPIO_getInputPinValue(GPIO_PORT_P4, GPIO_PIN0)){
                     GPIO_setOutputLowOnPin(GPIO_PORT_P3, GPIO_PIN6 | GPIO_PIN7);
@@ -144,7 +144,7 @@ void GPIOInit(){
     GPIO_setAsInputPin(GPIO_PORT_P5, GPIO_PIN6);
     GPIO_setOutputLowOnPin(GPIO_PORT_P5, GPIO_PIN4 | GPIO_PIN5);
     GPIO_setAsOutputPin(GPIO_PORT_P6, GPIO_PIN6);
-    GPIO_setOutputLowOnPin(GPIO_PORT_P6, GPIO_PIN6);
+    GPIO_setOutputLowOnPin(GPIO_PORT_P3, GPIO_PIN5);
 }
 void Turn(uint32_t degrees){
     float degree1 = ((degrees * 3.1415/180) * (149/2) * 1.55);
@@ -163,7 +163,7 @@ void Turn(uint32_t degrees){
 void PreProg(uint32_t turns[]){
     uint8_t i = 0;
     uint8_t arraycount = 0;
-    while(i < 3){
+    while(i < 6){
         if(!GPIO_getInputPinValue(GPIO_PORT_P4, GPIO_PIN0)){
             printf("Pressed\r\n");
             __delay_cycles(24e6);

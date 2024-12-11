@@ -1,7 +1,7 @@
 ////////////////////////////////////////////////////////////////////////
 //** ENGR-2350 Template Project 
-//** NAME: Evan Lacey
-//** RIN: 662057116
+//** NAME: Evan Lacey, Xiomara Pelaez Cuacua, Gizelle Ojeda-Ericksen
+//** RIN: 662057116, 662068537, 662065015
 //** This is the base project for several activities and labs throughout
 //** the course.  The outline provided below isn't necessarily *required*
 //** by a C program; however, this format is required within ENGR-2350
